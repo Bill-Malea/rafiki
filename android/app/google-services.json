@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "891865379249",
+    "project_id": "rafiki-511ac",
+    "storage_bucket": "rafiki-511ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891865379249:android:ab609b91c7adce79c78d90",
+        "android_client_info": {
+          "package_name": "com.example.rafiki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891865379249-bqt40pe15kkk8lfreihfu7sni1d1ug1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaKcHp6DoTvxzvv6Q3o__Bixcagy2NKuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891865379249-bqt40pe15kkk8lfreihfu7sni1d1ug1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
