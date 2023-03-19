@@ -3,10 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:rafiki/screens/Homescreen.dart';
+import 'package:rafiki/Providers/TherapyProvider.dart';
+import 'package:rafiki/Providers/UserProvider.dart';
+import 'package:rafiki/screens/Patient/Homescreen.dart';
+import 'package:rafiki/screens/Patient/auth_screen.dart';
+import 'package:rafiki/screens/Patient/splash_screen.dart';
 import 'Providers/BottomNavProvider.dart';
-import 'screens/splash_screen.dart';
-import '/screens/auth_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +21,12 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => BottomNavProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TherapyProvider(),
         ),
       ],
       child: const MaterialApp(
@@ -36,7 +45,6 @@ class MyApp extends StatelessWidget {
         title: 'Rafiki',
         theme: ThemeData(
             primaryColor: const Color(0xFFffcc00),
-
             textTheme: GoogleFonts.poppinsTextTheme(),
             buttonTheme: ButtonTheme.of(context).copyWith(
                 buttonColor: Colors.pink,
@@ -47,7 +55,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSwatch()
                 .copyWith(background: Colors.white)
                 .copyWith(secondary: Colors.black)
-                .copyWith(primary: const Color(0xFFffcc00))),
+                .copyWith(primary: Colors.black)),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {
