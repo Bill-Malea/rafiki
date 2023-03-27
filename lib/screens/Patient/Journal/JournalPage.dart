@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../../Providers/JournalProvider.dart';
 import '../../../Providers/TherapyProvider.dart';
 import '../../../models/TherapistModel.dart';
 
@@ -16,17 +17,51 @@ class JournalPage extends StatefulWidget {
 
 class _JournalPageState extends State<JournalPage> {
   @override
+  void initState() {
+    super.initState();
+
+    Provider.of<JournalProvider>(context, listen: false).journalExists();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Therapist? bookedTherapist =
         Provider.of<TherapyProvider>(context).bookedTherapist;
+
+    var journalUploaded = Provider.of<JournalProvider>(
+      context,
+    ).journalUploaded;
+    var isLoading = Provider.of<JournalProvider>(
+      context,
+    ).isLoading;
     return Column(
       children: [
         bookedTherapist != null
             ? Column(
-                children: [MoodRow()],
+                children: [
+                  if (isLoading || journalUploaded)
+                    const SizedBox(
+                      height: 200,
+                    ),
+                  if (isLoading)
+                    const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                      ),
+                    ),
+                  if (journalUploaded && !isLoading)
+                    const Center(
+                      child: Text(
+                          'Today\'s journal has been uploaded Add More Tommorow'),
+                    ),
+                  if (!journalUploaded && !isLoading) MoodRow(),
+                ],
               )
-            : const Center(
-                child: Text('Please Choose A Therapist To Add journal Notes'),
+            : Container(
+                margin: const EdgeInsets.only(top: 300),
+                child: const Center(
+                  child: Text('Please Book A Therapist To Add journal Notes'),
+                ),
               ),
       ],
     );
@@ -52,6 +87,7 @@ class MoodRow extends StatefulWidget {
 }
 
 class _MoodRowState extends State<MoodRow> {
+  final patientid = FirebaseAuth.instance.currentUser!.uid;
   late List<Mood> moods;
   late TextEditingController _feelingController;
 
@@ -97,16 +133,16 @@ class _MoodRowState extends State<MoodRow> {
   }
 
   void _uploadMood() {
-    // Create an object with the selected mood, its rating, and the feeling text
+    // Create an object with the selected mood, its rating, and the
+    //feeling text
     Mood selectedMood = moods.firstWhere((mood) => mood.isSelected);
     double moodRating = selectedMood.rating;
     String feelingText = _feelingController.text;
 
     // Upload the object to the server
-    if (kDebugMode) {
-      print(
-          'Selected mood: ${selectedMood.name}, rating: $moodRating, feeling text: $feelingText');
-    }
+    var data = {'journal': feelingText, 'rating': moodRating};
+    Provider.of<JournalProvider>(context, listen: false)
+        .uploadjournal(patientid, data);
   }
 
   @override

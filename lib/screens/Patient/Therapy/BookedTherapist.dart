@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/TherapyProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../../../Providers/SlotsProvider.dart';
+import '../../../models/SlotsModel.dart';
 import '../../../models/TherapistModel.dart';
+import 'SlotsPatient.dart';
 
 class BookedTherapist extends StatefulWidget {
   final Therapist therapist;
@@ -16,7 +20,12 @@ class BookedTherapist extends StatefulWidget {
 }
 
 class _BookedTherapistState extends State<BookedTherapist> {
-  var _bookingsession = false;
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<SlotProvider>(context, listen: false)
+        .fetchSlots(widget.therapist.id);
+  }
 
   Future<void> _makePhoneCall() async {
     final Uri launchUri = Uri(
@@ -26,25 +35,14 @@ class _BookedTherapistState extends State<BookedTherapist> {
     await launchUrl(launchUri);
   }
 
-  _booksession() {
-    setState(() {
-      _bookingsession = true;
-    });
-    Provider.of<TherapyProvider>(context, listen: false)
-        .bookTherapist(
-      widget.therapist,
-    )
-        .whenComplete(() {
-      setState(() {
-        _bookingsession = false;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    List<Slot> slots = Provider.of<SlotProvider>(
+      context,
+    ).slots;
+    print(slots);
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(4.0),
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,28 +122,17 @@ class _BookedTherapistState extends State<BookedTherapist> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  !_bookingsession
-                      ? InkWell(
-                          onTap: () {
-                            _booksession();
-                          },
-                          child: Container(
-                            height: 40,
-                            decoration:
-                                const BoxDecoration(color: Colors.black),
-                            child: const Center(
-                              child: Text(
-                                'Book Session',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                          strokeWidth: 1.0,
-                        )),
-                  const SizedBox(height: 20.0),
+                  const Text(
+                    'Select Slots for Your Sessions',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  PatientSlots(
+                    slot: slots,
+                    therapistid: widget.therapist.id,
+                  ),
                   Container(
                     height: 40,
                     decoration: const BoxDecoration(color: Colors.black),

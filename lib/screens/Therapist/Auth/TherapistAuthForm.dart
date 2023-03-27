@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-class AuthForm extends StatefulWidget {
-  const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
+class TherapistAuthForm extends StatefulWidget {
+  const TherapistAuthForm(this.submitFn, this.isLoading, {Key? key})
+      : super(key: key);
 
   final bool isLoading;
   final void Function(
     String email,
     String password,
-    String userName,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
 
   @override
-  State<AuthForm> createState() => _AuthFormState();
+  State<TherapistAuthForm> createState() => _TherapistAuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _TherapistAuthFormState extends State<TherapistAuthForm> {
   final _formKey = GlobalKey<FormState>();
   var _isLogin = true;
   var _userEmail = '';
@@ -30,8 +30,8 @@ class _AuthFormState extends State<AuthForm> {
 
     if (isValid) {
       _formKey.currentState!.save();
-      widget.submitFn(_userEmail.trim(), _userPassword.trim(), _userName.trim(),
-          _isLogin, context);
+      widget.submitFn(
+          _userEmail.trim(), _userPassword.trim(), _isLogin, context);
     }
   }
 
@@ -48,43 +48,11 @@ class _AuthFormState extends State<AuthForm> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(15.0, 50.0, 0.0, 0.0),
-                    child: const Text('Hi',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 80.0,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(15.0, 125.0, 0.0, 0.0),
-                    child: DefaultTextStyle(
-                      style: const TextStyle(
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      child: AnimatedTextKit(
-                        animatedTexts: [
-                          WavyAnimatedText("There"),
-                          WavyAnimatedText('Again'),
-                        ],
-                        isRepeatingAnimation: false,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(235.0, 125.0, 0.0, 0.0),
-                    child: const Text('.',
-                        style: TextStyle(
-                            fontSize: 80.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black)),
-                  )
-                ],
-              ),
+              const Text('Hi Doctor.',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 80.0,
+                      fontWeight: FontWeight.bold)),
               Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -115,6 +83,7 @@ class _AuthFormState extends State<AuthForm> {
                               _userEmail = value!;
                             },
                           ),
+                          if (!_isLogin) const SizedBox(height: 20.0),
                           const SizedBox(height: 20.0),
                           TextFormField(
                             key: const ValueKey('password'),

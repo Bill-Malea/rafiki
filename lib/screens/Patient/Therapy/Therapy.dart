@@ -23,7 +23,7 @@ class _TherapyState extends State<Therapy> {
   @override
   void initState() {
     super.initState();
-
+    Provider.of<TherapyProvider>(context, listen: false).fetchTherapyData();
     Provider.of<TherapyProvider>(context, listen: false).fetchUserTherapist();
   }
 
@@ -32,19 +32,21 @@ class _TherapyState extends State<Therapy> {
     Therapist? bookedTherapist =
         Provider.of<TherapyProvider>(context).bookedTherapist;
 
-    return Column(
-      children: [
-        bookedTherapist != null
+    return Container(
+        padding: const EdgeInsets.only(top: 30),
+        child: bookedTherapist != null
             ? BookedTherapist(therapist: bookedTherapist)
             : Consumer<TherapyProvider>(
                 builder: (context, therapyProvider, _) {
                   final therapyList = therapyProvider.therapyList;
                   if (therapyList.isEmpty) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return Container(
+                      margin: const EdgeInsets.only(top: 200, left: 100),
+                      child: const CircularProgressIndicator(),
                     );
                   } else {
                     return ListView.builder(
+                      shrinkWrap: true,
                       itemCount: therapyList.length,
                       itemBuilder: (context, index) {
                         final therapy = therapyList[index];
@@ -77,7 +79,6 @@ class _TherapyState extends State<Therapy> {
                                   direction: Axis.horizontal,
                                 ),
                                 Text(therapy.county),
-                                Text(therapy.price),
                               ],
                             ),
                           ),
@@ -86,8 +87,6 @@ class _TherapyState extends State<Therapy> {
                     );
                   }
                 },
-              ),
-      ],
-    );
+              ));
   }
 }

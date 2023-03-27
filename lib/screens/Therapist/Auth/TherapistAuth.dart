@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rafiki/screens/Patient/Homescreen.dart';
-import 'package:rafiki/screens/Patient/PatientData/PatientData.dart';
+import 'package:rafiki/screens/Therapist/TherapistData/TherapistData.dart';
+import '../../Patient/widgets/auth/auth_form.dart';
+import '../Screens/TherapistHome.dart';
+import 'TherapistAuthForm.dart';
 
-import 'widgets/auth/auth_form.dart';
-
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+class TherapistAuth extends StatefulWidget {
+  const TherapistAuth({Key? key}) : super(key: key);
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<TherapistAuth> createState() => _TherapistAuthState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _TherapistAuthState extends State<TherapistAuth> {
   final _auth = FirebaseAuth.instance;
 
   var _isLoading = false;
@@ -21,7 +21,6 @@ class _AuthScreenState extends State<AuthScreen> {
   void _submitAuthForm(
     String email,
     String password,
-    String userName,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -38,7 +37,8 @@ class _AuthScreenState extends State<AuthScreen> {
           value.user!.uid.isNotEmpty
               ? Navigator.pushReplacement(
                   ctx,
-                  MaterialPageRoute(builder: (context) => const Homescreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const TherapistHome()),
                 )
               : null;
           return value;
@@ -50,11 +50,13 @@ class _AuthScreenState extends State<AuthScreen> {
           value.user!.uid.isNotEmpty
               ? Navigator.pushReplacement(
                   ctx,
-                  MaterialPageRoute(builder: (context) => const PatientData()),
+                  MaterialPageRoute(
+                      builder: (context) => const TherapistData()),
                 )
               : null;
           return value;
         });
+        ;
       }
     } on PlatformException catch (err) {
       var message = "An error occured please check your credentails";
@@ -83,7 +85,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthForm(_submitAuthForm, _isLoading),
+      body: TherapistAuthForm(_submitAuthForm, _isLoading),
     );
   }
 }

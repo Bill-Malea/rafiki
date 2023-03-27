@@ -27,6 +27,8 @@ final moods = [
 ];
 
 class MeditationList extends StatelessWidget {
+  const MeditationList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

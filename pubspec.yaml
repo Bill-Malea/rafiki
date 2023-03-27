@@ -53,6 +53,10 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_toastr: ^1.0.3
   fluttertoast: ^8.2.1
+  get_storage: ^2.1.1
+  percent_indicator: ^4.2.3
+  uuid: ^3.0.7
+  
 
 dev_dependencies:
   flutter_test:

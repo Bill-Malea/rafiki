@@ -2,8 +2,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/BottomNavProvider.dart';
+import '../../Providers/JournalProvider.dart';
 import '../../Providers/TherapyProvider.dart';
 import 'Bottomnav/BottomNav.dart';
 import 'Journal/JournalPage.dart';
@@ -24,22 +26,30 @@ class _HomescreenState extends State<Homescreen> {
     super.initState();
 
     Provider.of<TherapyProvider>(context, listen: false).fetchUserTherapist();
+    Provider.of<JournalProvider>(context, listen: false).journalExists();
   }
 
   final List<Widget> _pages = <Widget>[
     const Home(),
     const Therapy(),
-    MeditationList(),
+    const MeditationList(),
     const TherapyPage(
       pgname: 'Community',
     ),
     const JournalPage()
   ];
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     var selectedIndex = Provider.of<BottomNavProvider>(context).selectetab;
+
+    setuser() {
+      box.write('user', null);
+    }
+
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         backgroundColor: Colors.black,
         title: const Text('Rafiki'),
         centerTitle: true,
@@ -47,6 +57,7 @@ class _HomescreenState extends State<Homescreen> {
           InkWell(
             onTap: () {
               auth.signOut();
+              setuser();
             },
             child: Row(
               children: const [
