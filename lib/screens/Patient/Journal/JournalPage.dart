@@ -19,7 +19,6 @@ class _JournalPageState extends State<JournalPage> {
   @override
   void initState() {
     super.initState();
-
     Provider.of<JournalProvider>(context, listen: false).journalExists();
   }
 
@@ -93,7 +92,10 @@ class _MoodRowState extends State<MoodRow> {
 
   @override
   void initState() {
+    Provider.of<JournalProvider>(context, listen: false).journalExists();
+
     super.initState();
+
     moods = [
       Mood(name: 'Neutral', color: Colors.lightGreen),
       Mood(name: 'Sad', color: Colors.orangeAccent),
@@ -142,7 +144,13 @@ class _MoodRowState extends State<MoodRow> {
     // Upload the object to the server
     var data = {'journal': feelingText, 'rating': moodRating};
     Provider.of<JournalProvider>(context, listen: false)
-        .uploadjournal(patientid, data);
+        .uploadjournal(patientid, data)
+        .then((value) async {
+      if (mounted) {
+        await Provider.of<JournalProvider>(context, listen: false)
+            .journalExists();
+      }
+    });
   }
 
   @override

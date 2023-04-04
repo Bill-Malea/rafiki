@@ -2,9 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:rafiki/Providers/SlotsProvider.dart';
+import 'package:rafiki/SelectUser.dart';
 import 'package:rafiki/screens/Therapist/Screens/Appointment.dart';
 import '../../Providers/BottomNavProvider.dart';
 import '../../Providers/TherapyProvider.dart';
+import '../../Providers/UserProvider.dart';
 import 'BottomTherapist/BottomNavTherapist.dart';
 import 'Screens/Patients.dart';
 import 'Screens/Slots.dart';
@@ -22,8 +25,10 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    Provider.of<SlotProvider>(context, listen: false)
+        .fetchSlots(auth.currentUser!.uid);
     Provider.of<TherapyProvider>(context, listen: false).fetchTherapyData();
+    Provider.of<UserProvider>(context, listen: false).fetchpatients();
   }
 
   final List<Widget> _pages = <Widget>[
@@ -41,6 +46,12 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
       box.write('user', null);
     }
 
+    Future<SelectUser> signOut() async {
+      setuser();
+      await FirebaseAuth.instance.signOut();
+      return const SelectUser();
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -49,8 +60,7 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
         actions: [
           InkWell(
             onTap: () {
-              auth.signOut();
-              setuser();
+              signOut();
             },
             child: Row(
               children: const [

@@ -7,7 +7,8 @@ import '../utilities/utility.dart';
 
 class JournalProvider extends ChangeNotifier {
   final patientid = FirebaseAuth.instance.currentUser!.uid;
-
+  double _patientaverage = 0.0;
+  double get patientaverage => _patientaverage;
   bool _journalUploaded = false;
 
   bool get journalUploaded => _journalUploaded;
@@ -20,35 +21,83 @@ class JournalProvider extends ChangeNotifier {
     final year = now.year.toString();
     final month = now.month.toString();
     final day = now.day.toString();
-    if (kDebugMode) {
-      print(year + month + day);
-    }
+
     return year + month + day;
   }
 
-  Future<void> journalExists() async {
+  Future<bool> journalExists() async {
     _isLoading = true;
     notifyListeners();
-    var todaydate = date();
+
+    final todaydate = date().trim();
     try {
-      final getResponse = await http.get(Uri.parse(
+      var getResponse = await http.get(Uri.parse(
           'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'));
 
-      var data = json.decode(getResponse.body);
+      final data = json.decode(getResponse.body);
 
       if (getResponse.statusCode == 200 && data != null) {
-        _isLoading = false;
-        _journalUploaded = true;
+        var rawdata = [];
+        var journalslist = data as Map;
+        journalslist.forEach((key, val) {
+          var json = {
+            key: key,
+            val: val,
+          };
+          rawdata.add(json);
+        });
+
+        if (journalslist.length < 3) {
+          _isLoading = false;
+          _journalUploaded = false;
+          notifyListeners();
+          return false;
+        } else {
+          _isLoading = false;
+          _journalUploaded = true;
+          notifyListeners();
+          return true;
+        }
       } else {
         _isLoading = false;
-        _journalUploaded = false;
-      }
 
-      notifyListeners();
+        notifyListeners();
+      }
     } on SocketException {
       _isLoading = true;
 
       notifyListeners();
+    } catch (e) {}
+    return false;
+  }
+
+  Future<void> fectchjournals() async {
+    try {
+      var getResponse = await http.get(Uri.parse(
+          'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid.json'));
+
+      final data = json.decode(getResponse.body);
+
+      var sum = 0.0;
+      var count = 0;
+      if (getResponse.statusCode == 200 && data != null) {
+        var journalslist = data as Map<String, dynamic>;
+
+        journalslist.forEach((key, val) {
+          var journaldata = val as Map<String, dynamic>;
+          journaldata.forEach((id, value) {
+            var rating = value['rating'];
+            sum += rating;
+            count++;
+          });
+          var averageRating = count > 0 ? sum / count * 100 : 0;
+          _patientaverage = averageRating.toDouble();
+          notifyListeners();
+        });
+
+        notifyListeners();
+      } else {}
+    } on SocketException {
     } catch (e) {}
   }
 
@@ -56,19 +105,18 @@ class JournalProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      var todaydate = date();
-      final postResponse = await http.put(
+      var todaydate = date().trim();
+      final postResponse = await http.post(
           Uri.parse(
-              'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate .json'),
+              'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'),
           body: jsonEncode(journal));
       final postData = json.decode(postResponse.body);
 
       if (postResponse.statusCode == 200) {
         _isLoading = false;
-        _journalUploaded = true;
-      }
 
-      notifyListeners();
+        notifyListeners();
+      }
     } on SocketException {
       errortoast('Check Your Internet Connection and Try Again');
       _isLoading = true;

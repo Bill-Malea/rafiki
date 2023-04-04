@@ -21,7 +21,7 @@ class _PatientSlotsState extends State<PatientSlots> {
   var isloading = true;
   late BuildContext bookingDialog;
   void showBookingDialog(BuildContext context, String weekday, String patientId,
-      String slotid, String therapistid) {
+      Slots slot, String therapistid) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -42,7 +42,7 @@ class _PatientSlotsState extends State<PatientSlots> {
     );
 
     Provider.of<SlotProvider>(context, listen: false)
-        .bookSlot(weekday, patientId, therapistid, slotid)
+        .bookSlot(weekday, patientId, therapistid, slot)
         .then((bookingSuccessful) async {
       Provider.of<SlotProvider>(context, listen: false).fetchSlots(user);
       Navigator.pop(bookingDialog);
@@ -91,26 +91,27 @@ class _PatientSlotsState extends State<PatientSlots> {
                             var slot = widget.slot[index].slots[i];
 
                             return InkWell(
-                              onTap: slot.patientId.isEmpty
+                              onTap: slot.patientId == null
                                   ? () {
                                       showBookingDialog(
-                                          ctx,
-                                          widget.slot[index].dayOfWeek,
-                                          user,
-                                          widget.therapistid,
-                                          slot.id);
+                                        ctx,
+                                        widget.slot[index].dayOfWeek,
+                                        user,
+                                        slot,
+                                        widget.therapistid,
+                                      );
                                     }
                                   : null,
                               child: Container(
+                                padding: const EdgeInsets.all(3),
                                 margin: const EdgeInsets.only(
-                                  right: 10,
+                                  right: 5,
                                   bottom: 15,
                                   left: 5,
                                 ),
-                                width: 40,
-                                height: 70,
+                                height: 80,
                                 decoration: BoxDecoration(
-                                  color: slot.patientId.isEmpty
+                                  color: slot.patientId == null
                                       ? Colors.white
                                       : Colors.black,
                                   border: Border.all(color: Colors.black),
@@ -121,34 +122,31 @@ class _PatientSlotsState extends State<PatientSlots> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const SizedBox(
-                                      height: 3,
+                                      height: 1,
                                     ),
                                     Text(
                                       slot.startTime,
                                       style: TextStyle(
-                                        color: slot.patientId.isEmpty
+                                        color: slot.patientId == null
                                             ? Colors.black
                                             : Colors.white,
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 3,
+                                      height: 1,
                                     ),
                                     Text(
                                       '-',
                                       style: TextStyle(
-                                        color: slot.patientId.isEmpty
+                                        color: slot.patientId == null
                                             ? Colors.black
                                             : Colors.white,
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
                                     Text(
                                       slot.endTime,
                                       style: TextStyle(
-                                        color: slot.patientId.isEmpty
+                                        color: slot.patientId == null
                                             ? Colors.black
                                             : Colors.white,
                                       ),

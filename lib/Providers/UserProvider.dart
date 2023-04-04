@@ -5,12 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rafiki/screens/Patient/Homescreen.dart';
+import '../models/PatientsModel.dart';
 import '../utilities/utility.dart';
 
 class UserProvider extends ChangeNotifier {
   final id = FirebaseAuth.instance.currentUser!.uid;
 // upload therapist data apart from the initial login data
-
+  List<Patient> _patients = [];
+  List<Patient> get patients => [..._patients];
   late bool _haspatientdata;
   bool get haspatientdata => _haspatientdata;
 
@@ -48,5 +50,34 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
 
     return data != null;
+  }
+
+  Future<void> fetchpatients() async {
+    final response = await http.get(Uri.parse(
+        'https://rafiki-511ac-default-rtdb.firebaseio.com/Patients.json'));
+    final rawdata = json.decode(response.body);
+    if (response.statusCode == 200) {
+      var data = rawdata as Map<String, dynamic>;
+
+      List<Patient> rawpatientlist = [];
+      data.forEach((key, value) {
+        var val = value as Map<String, dynamic>;
+        for (var element in val.values) {
+          rawpatientlist.add(Patient(
+            userid: element['UserId'] ?? '',
+            county: element['county'] ?? '',
+            gender: element['gender'] ?? '',
+            name: element['name'] ?? '',
+            yob: element['yearofbith'] ?? '',
+            phone: element['phone'] ?? '',
+          ));
+        }
+      });
+      print(rawpatientlist);
+      _patients = rawpatientlist;
+      notifyListeners();
+    }
+
+    return;
   }
 }

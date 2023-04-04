@@ -7,10 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/BottomNavProvider.dart';
 import '../../Providers/JournalProvider.dart';
 import '../../Providers/TherapyProvider.dart';
+import '../../SelectUser.dart';
 import 'Bottomnav/BottomNav.dart';
 import 'Journal/JournalPage.dart';
 import 'Meditation.dart';
 import 'Therapy/Therapy.dart';
+import 'UserProgress/UserProgress.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -24,19 +26,19 @@ class _HomescreenState extends State<Homescreen> {
   @override
   void initState() {
     super.initState();
-
-    Provider.of<TherapyProvider>(context, listen: false).fetchUserTherapist();
-    Provider.of<JournalProvider>(context, listen: false).journalExists();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<JournalProvider>(context, listen: false).journalExists();
+      Provider.of<TherapyProvider>(context, listen: false).fetchUserTherapist();
+      Provider.of<JournalProvider>(context, listen: false).fectchjournals();
+    });
   }
 
   final List<Widget> _pages = <Widget>[
     const Home(),
     const Therapy(),
     const MeditationList(),
-    const TherapyPage(
-      pgname: 'Community',
-    ),
-    const JournalPage()
+    const JournalPage(),
+    const PatientProgress()
   ];
   final box = GetStorage();
   @override
@@ -45,6 +47,12 @@ class _HomescreenState extends State<Homescreen> {
 
     setuser() {
       box.write('user', null);
+    }
+
+    Future<SelectUser> signOut() async {
+      setuser();
+      await FirebaseAuth.instance.signOut();
+      return const SelectUser();
     }
 
     return Scaffold(
@@ -56,8 +64,7 @@ class _HomescreenState extends State<Homescreen> {
         actions: [
           InkWell(
             onTap: () {
-              auth.signOut();
-              setuser();
+              signOut();
             },
             child: Row(
               children: const [

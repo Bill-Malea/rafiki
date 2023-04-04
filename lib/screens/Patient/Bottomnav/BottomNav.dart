@@ -68,7 +68,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
             width: 20,
           ),
           TabItem(
-            text: 'Community',
+            text: 'Journal',
             active: selected[3],
             touched: () {
               setState(() {
@@ -82,7 +82,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
             width: 20,
           ),
           TabItem(
-            text: 'Journal',
+            text: 'Report',
             active: selected[4],
             touched: () {
               setState(() {

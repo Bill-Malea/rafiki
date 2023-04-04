@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
+import '../ForgotpasswordPage.dart';
+
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
@@ -33,6 +35,12 @@ class _AuthFormState extends State<AuthForm> {
       widget.submitFn(_userEmail.trim(), _userPassword.trim(), _userName.trim(),
           _isLogin, context);
     }
+  }
+
+  bool isemailvalid(String email) {
+    bool emailValid = RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+        .hasMatch(email);
+    return emailValid;
   }
 
   @override
@@ -106,7 +114,7 @@ class _AuthFormState extends State<AuthForm> {
                             textCapitalization: TextCapitalization.none,
                             enableSuggestions: false,
                             validator: (value) {
-                              if (value!.isEmpty || !value.contains('@')) {
+                              if (!isemailvalid(value!)) {
                                 return 'Please enter a valid email address';
                               }
                               return null;
@@ -188,6 +196,25 @@ class _AuthFormState extends State<AuthForm> {
                                       fontSize: 16,
                                     ),
                                   ),
+                                ),
+                              ),
+                            ),
+                          if (_isLogin)
+                            InkWell(
+                              onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            const ForgotPassword()));
+                              },
+                              child: const Center(
+                                child: Text(
+                                  'Forgot Password ?',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),

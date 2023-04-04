@@ -10,7 +10,9 @@ import 'package:rafiki/Providers/TherapyProvider.dart';
 import 'package:rafiki/Providers/UserProvider.dart';
 import 'package:rafiki/SelectUser.dart';
 import 'package:rafiki/screens/Patient/Homescreen.dart';
+import 'package:rafiki/screens/Patient/auth_screen.dart';
 import 'package:rafiki/screens/Patient/splash_screen.dart';
+import 'package:rafiki/screens/Therapist/Auth/TherapistAuth.dart';
 import 'Providers/BottomNavProvider.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -81,6 +83,7 @@ class _MyAppState extends State<MyApp> {
             if (userSnapshot.connectionState == ConnectionState.waiting) {
               return const SplashScreen();
             }
+
             if (userSnapshot.hasData &&
                 user.toString().toLowerCase() == 'patient') {
               return const Homescreen();
@@ -89,9 +92,7 @@ class _MyAppState extends State<MyApp> {
             if (!userSnapshot.hasData && user == null) {
               return const SelectUser();
             }
-            if (userSnapshot.hasData && user != null) {
-              return const SelectUser();
-            }
+
             if (userSnapshot.hasData &&
                 user.toString().toLowerCase() == 'therapist') {
               return const TherapistHomeScreen();

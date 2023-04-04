@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
+import 'package:rafiki/Providers/UserProvider.dart';
 import 'package:rafiki/screens/Therapist/Screens/PatientsDetails.dart';
 
 class Patients extends StatelessWidget {
@@ -7,6 +9,8 @@ class Patients extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var patients = Provider.of<UserProvider>(context).patients;
+
     return Container(
       padding: const EdgeInsets.only(
         top: 10,
@@ -28,8 +32,9 @@ class Patients extends StatelessWidget {
             thickness: 1,
           ),
           ListView.builder(
+            primary: true,
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: patients.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
@@ -51,7 +56,7 @@ class Patients extends StatelessWidget {
                               color: Colors.black,
                               size: 25,
                             )),
-                        title: const Text('Bill Malea'),
+                        title: Text(patients[index].name),
                         trailing: CircularPercentIndicator(
                           radius: 28.0,
                           lineWidth: 5.0,

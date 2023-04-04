@@ -149,6 +149,7 @@ class TherapyProvider extends ChangeNotifier {
               'rating': therapist.rating,
               'gender': therapist.gender,
               'price': therapist.price,
+              'sessions': '0',
               'date': DateTime.now().toString(),
             }));
 

@@ -129,10 +129,26 @@ class _BookedTherapistState extends State<BookedTherapist> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  PatientSlots(
-                    slot: slots,
-                    therapistid: widget.therapist.id,
-                  ),
+                  slots.isEmpty
+                      ? const SizedBox(
+                          height: 20,
+                        )
+                      : const SizedBox(),
+                  slots.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1,
+                          ),
+                        )
+                      : PatientSlots(
+                          slot: slots,
+                          therapistid: widget.therapist.id,
+                        ),
+                  slots.isEmpty
+                      ? const SizedBox(
+                          height: 20,
+                        )
+                      : const SizedBox(),
                   Container(
                     height: 40,
                     decoration: const BoxDecoration(color: Colors.black),
