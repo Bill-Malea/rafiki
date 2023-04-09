@@ -8,6 +8,8 @@ import '../models/SlotsModel.dart';
 
 class SlotProvider extends ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
+  List<String> _mypatientsid = [];
+  List<String> get mypatientsid => [..._mypatientsid];
   List<Slot> _slots = [];
   List<Slots> _subslots = [];
   List<Slots> get subslots => [..._subslots];
@@ -24,6 +26,7 @@ class SlotProvider extends ChangeNotifier {
       final data = json.decode(response.body) ?? {} as Map<String, dynamic>;
       var newdata = <Slot>[];
       var slo = <Slots>[];
+      List<String> patientsid = [];
       data.forEach((key, value) {
         var rawdata = value as Map<String, dynamic>;
         var subslotsdata = <Slots>[];
@@ -35,6 +38,9 @@ class SlotProvider extends ChangeNotifier {
             endTime: val['end_time'] ?? '',
             patientId: val['patient_id'],
           );
+          if (val['patient_id'].toString().isNotEmpty) {
+            patientsid.add(val['patient_id']);
+          }
           subslotsdata.add(subsslot);
           slo.add(subsslot);
         });
@@ -42,7 +48,7 @@ class SlotProvider extends ChangeNotifier {
         var slot = Slot(id: key, dayOfWeek: key, slots: subslotsdata);
         newdata.add(slot);
       });
-
+      _mypatientsid = patientsid;
       _subslots = slo;
       _slots = newdata;
       notifyListeners();

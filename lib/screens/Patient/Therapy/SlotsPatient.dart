@@ -91,7 +91,7 @@ class _PatientSlotsState extends State<PatientSlots> {
                             var slot = widget.slot[index].slots[i];
 
                             return InkWell(
-                              onTap: slot.patientId == null
+                              onTap: slot.patientId.isEmpty
                                   ? () {
                                       showBookingDialog(
                                         ctx,
@@ -111,7 +111,7 @@ class _PatientSlotsState extends State<PatientSlots> {
                                 ),
                                 height: 80,
                                 decoration: BoxDecoration(
-                                  color: slot.patientId == null
+                                  color: slot.patientId.isEmpty
                                       ? Colors.white
                                       : Colors.black,
                                   border: Border.all(color: Colors.black),
@@ -127,7 +127,7 @@ class _PatientSlotsState extends State<PatientSlots> {
                                     Text(
                                       slot.startTime,
                                       style: TextStyle(
-                                        color: slot.patientId == null
+                                        color: slot.patientId.isEmpty
                                             ? Colors.black
                                             : Colors.white,
                                       ),
@@ -138,7 +138,7 @@ class _PatientSlotsState extends State<PatientSlots> {
                                     Text(
                                       '-',
                                       style: TextStyle(
-                                        color: slot.patientId == null
+                                        color: slot.patientId.isEmpty
                                             ? Colors.black
                                             : Colors.white,
                                       ),
@@ -146,7 +146,7 @@ class _PatientSlotsState extends State<PatientSlots> {
                                     Text(
                                       slot.endTime,
                                       style: TextStyle(
-                                        color: slot.patientId == null
+                                        color: slot.patientId.isEmpty
                                             ? Colors.black
                                             : Colors.white,
                                       ),

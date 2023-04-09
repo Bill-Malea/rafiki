@@ -7,6 +7,8 @@ import '../utilities/utility.dart';
 
 class JournalProvider extends ChangeNotifier {
   final patientid = FirebaseAuth.instance.currentUser!.uid;
+  List<Journal> _journal = [];
+  List<Journal> get journals => _journal;
   double _patientaverage = 0.0;
   double get patientaverage => _patientaverage;
   bool _journalUploaded = false;
@@ -71,10 +73,10 @@ class JournalProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<void> fectchjournals() async {
+  Future<void> fectchjournals(String id) async {
     try {
       var getResponse = await http.get(Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid.json'));
+          'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$id.json'));
 
       final data = json.decode(getResponse.body);
 
@@ -82,7 +84,7 @@ class JournalProvider extends ChangeNotifier {
       var count = 0;
       if (getResponse.statusCode == 200 && data != null) {
         var journalslist = data as Map<String, dynamic>;
-
+        List<Journal> rawjournals = [];
         journalslist.forEach((key, val) {
           var journaldata = val as Map<String, dynamic>;
           journaldata.forEach((id, value) {
@@ -92,10 +94,9 @@ class JournalProvider extends ChangeNotifier {
           });
           var averageRating = count > 0 ? sum / count * 100 : 0;
           _patientaverage = averageRating.toDouble();
+
           notifyListeners();
         });
-
-        notifyListeners();
       } else {}
     } on SocketException {
     } catch (e) {}

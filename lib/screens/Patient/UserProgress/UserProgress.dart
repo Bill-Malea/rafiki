@@ -1,8 +1,5 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/widgets.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/JournalProvider.dart';
@@ -15,10 +12,12 @@ class PatientProgress extends StatefulWidget {
 }
 
 class _PatientProgressState extends State<PatientProgress> {
+  final auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
-    Provider.of<JournalProvider>(context, listen: false).fectchjournals();
+    Provider.of<JournalProvider>(context, listen: false)
+        .fectchjournals(auth.currentUser!.uid);
   }
 
   @override

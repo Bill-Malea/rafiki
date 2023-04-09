@@ -73,7 +73,7 @@ class UserProvider extends ChangeNotifier {
           ));
         }
       });
-      print(rawpatientlist);
+    
       _patients = rawpatientlist;
       notifyListeners();
     }

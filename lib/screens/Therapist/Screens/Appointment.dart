@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
+
+import '../../../Providers/SlotsProvider.dart';
+import '../../../Providers/UserProvider.dart';
+import '../../../models/PatientsModel.dart';
+import '../../../models/SlotsModel.dart';
 
 class Appointment extends StatefulWidget {
   const Appointment({super.key});
@@ -11,6 +18,49 @@ class Appointment extends StatefulWidget {
 class _AppointmentState extends State<Appointment> {
   @override
   Widget build(BuildContext context) {
+    final day = DateFormat('EEEE').format(DateTime.now());
+    var patientsids = Provider.of<SlotProvider>(context).mypatientsid;
+    var patients = Provider.of<UserProvider>(context).patients;
+    var subslots = Provider.of<SlotProvider>(context).subslots;
+    List<Patient> getmypatients() {
+      List<Patient> result = [];
+      if (patientsids.isNotEmpty && patientsids.isNotEmpty) {
+        for (var patientid in patientsids) {
+          final patient =
+              patients.firstWhere((element) => element.userid == patientid);
+          result.add(patient);
+        }
+      }
+      var distinctIds = result.toSet().toList().isEmpty
+          ? <Patient>[]
+          : result.toSet().toList();
+      return distinctIds;
+    }
+
+    Slots getslot(String id) {
+      var slot = subslots.where((element) =>
+          element.patientId == id &&
+          element.dayOfWeek.toLowerCase() == day.toLowerCase());
+      return slot.first;
+    }
+
+    List<AppointmentModel> appointments() {
+      List<AppointmentModel> apps = [];
+      var myppat = getmypatients();
+      for (var element in myppat) {
+        var patientslot = getslot(element.userid);
+        apps.add(AppointmentModel(
+          name: element.name,
+          patientid: element.userid,
+          phone: element.phone,
+          starttime: patientslot.startTime,
+          endtime: patientslot.endTime,
+          gender: element.gender,
+        ));
+      }
+      return apps;
+    }
+
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -31,8 +81,9 @@ class _AppointmentState extends State<Appointment> {
           ),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: appointments().length,
             itemBuilder: (context, index) {
+              var patient = appointments()[index];
               return Column(
                 children: [
                   Container(
@@ -45,16 +96,15 @@ class _AppointmentState extends State<Appointment> {
                               color: Colors.black,
                               size: 25,
                             )),
-                        title: const Text('John Doe'),
+                        title: Text(patient.name),
                         subtitle: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('0727800223'),
-                                const Text('Eldoret'),
-                                const Text('Male'),
+                                Text(patient.phone),
+                                Text(patient.gender),
                                 Container(
                                   width: 70,
                                   height: 30,
@@ -98,7 +148,6 @@ class _AppointmentState extends State<Appointment> {
                                   height: 5,
                                 ),
                                 Container(
-                                  width: 40,
                                   height: 70,
                                   decoration: const BoxDecoration(
                                     color: Colors.black,
@@ -108,27 +157,29 @@ class _AppointmentState extends State<Appointment> {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    children: const [
-                                      SizedBox(
+                                    children: [
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
-                                        '10PM',
-                                        style: TextStyle(color: Colors.white),
+                                        patient.starttime,
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 3,
                                       ),
-                                      Text(
+                                      const Text(
                                         '-',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 3,
                                       ),
                                       Text(
-                                        '12PM',
-                                        style: TextStyle(color: Colors.white),
+                                        patient.endtime,
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -149,4 +200,21 @@ class _AppointmentState extends State<Appointment> {
       ),
     );
   }
+}
+
+class AppointmentModel {
+  final String name;
+  final String patientid;
+  final String phone;
+  final String starttime;
+  final String endtime;
+  final String gender;
+
+  AppointmentModel(
+      {required this.name,
+      required this.patientid,
+      required this.phone,
+      required this.starttime,
+      required this.endtime,
+      required this.gender});
 }

@@ -142,7 +142,11 @@ class _MoodRowState extends State<MoodRow> {
     String feelingText = _feelingController.text;
 
     // Upload the object to the server
-    var data = {'journal': feelingText, 'rating': moodRating};
+    var data = {
+      'journal': feelingText,
+      'rating': moodRating,
+      'mood': selectedMood,
+    };
     Provider.of<JournalProvider>(context, listen: false)
         .uploadjournal(patientid, data)
         .then((value) async {

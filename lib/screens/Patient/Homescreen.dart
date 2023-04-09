@@ -29,7 +29,8 @@ class _HomescreenState extends State<Homescreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<JournalProvider>(context, listen: false).journalExists();
       Provider.of<TherapyProvider>(context, listen: false).fetchUserTherapist();
-      Provider.of<JournalProvider>(context, listen: false).fectchjournals();
+      Provider.of<JournalProvider>(context, listen: false)
+          .fectchjournals(auth.currentUser!.uid);
     });
   }
 

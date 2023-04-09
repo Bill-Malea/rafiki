@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
+import 'package:rafiki/Providers/JournalProvider.dart';
+import 'package:rafiki/models/PatientsModel.dart';
 
 class PatientDetails extends StatefulWidget {
-  const PatientDetails({super.key});
+  final Patient patient;
+  const PatientDetails({super.key, required this.patient});
 
   @override
   State<PatientDetails> createState() => _PatientDetailsState();
@@ -33,6 +37,7 @@ class _PatientDetailsState extends State<PatientDetails>
 
   @override
   Widget build(BuildContext context) {
+    var journals = Provider.of<JournalProvider>(context).fectchjournals(widget.patient.userid);
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -65,37 +70,19 @@ class _PatientDetailsState extends State<PatientDetails>
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'John Doe',
-              style: TextStyle(
+            Text(
+              widget.patient.name,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Text(
-              'Tel: 070000303',
-              style: TextStyle(
+            Text(
+              'Tel: ${widget.patient.phone}',
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            Row(
-              children: const [
-                Text(
-                  'Sessions: ',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '4 ',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
             ),
             const SizedBox(
               height: 10,

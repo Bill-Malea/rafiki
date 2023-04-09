@@ -81,6 +81,7 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
         ],
       ),
       body: SingleChildScrollView(
+        primary: true,
         child: _pages.elementAt(selectedIndex),
       ),
       bottomNavigationBar: const TherapistNav(),

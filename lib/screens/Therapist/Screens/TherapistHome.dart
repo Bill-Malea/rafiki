@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/SlotsProvider.dart';
@@ -41,16 +42,15 @@ class TherapistHome extends StatelessWidget {
       return occupiedSlots.length;
     }
 
-    final now = DateTime.now();
+    final day = DateFormat('EEEE').format(DateTime.now());
 
-    final day = now.day.toString().toLowerCase();
     int todayslotslot() {
       var occupiedSlots = [];
 
       for (var element in slots) {
         for (var slot in element.slots) {
           if (slot.patientId.isNotEmpty &&
-              slot.dayOfWeek.toLowerCase() == day) {
+              slot.dayOfWeek.toLowerCase() == day.toLowerCase()) {
             occupiedSlots.add(slot);
           }
         }
@@ -59,17 +59,22 @@ class TherapistHome extends StatelessWidget {
     }
 
     Color progresscolor(int rating) {
-      if (rating < 50) {
+      if (rating < 50 && rating > 0) {
         return Colors.red;
       } else if (rating < 70 && rating > 50) {
         return Colors.amber;
       }
-
       return Colors.green;
     }
 
-    print(subslots.length);
-    print(availableslot());
+    var rating = (availableslot().isNaN
+                ? 0
+                : availableslot() / subslots.length * 100)
+            .isNaN
+        ? 0
+        : (availableslot().isNaN ? 0 : availableslot() / subslots.length * 100)
+            .floor();
+
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -260,8 +265,7 @@ class TherapistHome extends StatelessWidget {
                       lineWidth: 5.0,
                       percent: (availableslot() / subslots.length),
                       center: Text(availableslot().toString()),
-                      progressColor: progresscolor(
-                          (availableslot() / subslots.length * 100).floor()),
+                      progressColor: progresscolor(rating),
                     ),
                   ],
                 ),
