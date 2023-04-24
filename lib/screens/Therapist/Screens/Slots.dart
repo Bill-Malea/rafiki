@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/SlotsProvider.dart';
 import 'package:rafiki/Providers/TherapyProvider.dart';
+import 'package:rafiki/screens/Patient/Therapy/SlotsPatient.dart';
 
 class Slots extends StatefulWidget {
   const Slots({super.key});
@@ -15,72 +16,15 @@ class Slots extends StatefulWidget {
 
 class _SlotsState extends State<Slots> {
   final user = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   Widget build(BuildContext context) {
+    var slots = Provider.of<SlotProvider>(context).slots;
     return Container(
       padding: const EdgeInsets.all(15),
       child: Column(
         children: [
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  height: 80,
-                  child: Row(
-                    children: [
-                      const Text('Monday'),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 5,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            margin: const EdgeInsets.only(
-                              right: 10,
-                              bottom: 15,
-                              left: 5,
-                            ),
-                            width: 40,
-                            height: 70,
-                            decoration: const BoxDecoration(
-                              color: Colors.black,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(3)),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  '10PM',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(
-                                  '-',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(
-                                  '12PM',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                );
-              }),
+          PatientSlots(slot: slots, therapistid: user),
           const SizedBox(
             height: 20,
           ),

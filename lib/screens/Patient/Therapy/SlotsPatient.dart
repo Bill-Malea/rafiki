@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/SlotsProvider.dart';
 
-import '../../../models/SlotsModel.dart';
+import '../../../models/Slotsmodel.dart';
 
 class PatientSlots extends StatefulWidget {
   final List<Slot> slot;
@@ -17,6 +18,8 @@ class PatientSlots extends StatefulWidget {
 }
 
 class _PatientSlotsState extends State<PatientSlots> {
+  final box = GetStorage();
+
   final user = FirebaseAuth.instance.currentUser!.uid;
   var isloading = true;
   late BuildContext bookingDialog;
@@ -68,6 +71,7 @@ class _PatientSlotsState extends State<PatientSlots> {
 
   @override
   Widget build(BuildContext context) {
+    final usertype = box.read('user');
     return Container(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -93,13 +97,16 @@ class _PatientSlotsState extends State<PatientSlots> {
                             return InkWell(
                               onTap: slot.patientId.isEmpty
                                   ? () {
-                                      showBookingDialog(
-                                        ctx,
-                                        widget.slot[index].dayOfWeek,
-                                        user,
-                                        slot,
-                                        widget.therapistid,
-                                      );
+                                      if (usertype.toString().toLowerCase() ==
+                                          'patient') {
+                                        showBookingDialog(
+                                          ctx,
+                                          widget.slot[index].dayOfWeek,
+                                          user,
+                                          slot,
+                                          widget.therapistid,
+                                        );
+                                      }
                                     }
                                   : null,
                               child: Container(

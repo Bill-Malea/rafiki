@@ -27,8 +27,8 @@ class _PatientProgressState extends State<PatientProgress> {
     final height = MediaQuery.of(context).size.height;
 
     String progresstext(double rating) {
-      if (rating > 0 && rating < 30.0) {
-        return 'Come Champ You Can Do It. \n it takes time and Dedication';
+      if (rating < 30.0) {
+        return 'ComeOn Champ You Can Do It. \n it takes time and Dedication';
       } else if (rating <= 50.0 && rating >= 30.0) {
         return 'Great Progreess Keep\n Going A Step A day';
       } else if (rating > 50.0 && rating < 70.0) {

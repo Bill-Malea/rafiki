@@ -29,12 +29,11 @@ class JournalProvider extends ChangeNotifier {
 
   Future<bool> journalExists() async {
     _isLoading = true;
-    notifyListeners();
 
     final todaydate = date().trim();
     try {
       var getResponse = await http.get(Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'));
+          'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'));
 
       final data = json.decode(getResponse.body);
 
@@ -64,6 +63,7 @@ class JournalProvider extends ChangeNotifier {
         _isLoading = false;
 
         notifyListeners();
+        return false;
       }
     } on SocketException {
       _isLoading = true;
@@ -76,7 +76,7 @@ class JournalProvider extends ChangeNotifier {
   Future<void> fectchjournals(String id) async {
     try {
       var getResponse = await http.get(Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$id.json'));
+          'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$id.json'));
 
       final data = json.decode(getResponse.body);
 
@@ -109,11 +109,12 @@ class JournalProvider extends ChangeNotifier {
       var todaydate = date().trim();
       final postResponse = await http.post(
           Uri.parse(
-              'https://rafiki-511ac-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'),
+              'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'),
           body: jsonEncode(journal));
       final postData = json.decode(postResponse.body);
-
+      print(postResponse.body);
       if (postResponse.statusCode == 200) {
+      } else {
         _isLoading = false;
 
         notifyListeners();

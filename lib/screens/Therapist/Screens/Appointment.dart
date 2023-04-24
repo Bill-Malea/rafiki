@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../Providers/SlotsProvider.dart';
 import '../../../Providers/UserProvider.dart';
 import '../../../models/PatientsModel.dart';
-import '../../../models/SlotsModel.dart';
+import '../../../models/Slotsmodel.dart';
 
 class Appointment extends StatefulWidget {
   const Appointment({super.key});
@@ -61,6 +61,7 @@ class _AppointmentState extends State<Appointment> {
       return apps;
     }
 
+    List<AppointmentModel> patientlist = appointments();
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -81,9 +82,9 @@ class _AppointmentState extends State<Appointment> {
           ),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: appointments().length,
+            itemCount: patientlist.length,
             itemBuilder: (context, index) {
-              var patient = appointments()[index];
+              var patient = patientlist[index];
               return Column(
                 children: [
                   Container(

@@ -37,7 +37,8 @@ class _PatientDetailsState extends State<PatientDetails>
 
   @override
   Widget build(BuildContext context) {
-    var journals = Provider.of<JournalProvider>(context).fectchjournals(widget.patient.userid);
+    var journals = Provider.of<JournalProvider>(context)
+        .fectchjournals(widget.patient.userid);
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -111,10 +112,10 @@ class _PatientDetailsState extends State<PatientDetails>
                 child: Container(
               padding: const EdgeInsets.all(10),
               child: TabBarView(controller: tabController, children: [
-                journal(context),
-                journal(context),
-                journal(context),
-                journal(context),
+                journal(context, []),
+                journal(context, []),
+                journal(context, []),
+                journal(context, []),
               ]),
             )),
           ],
@@ -124,14 +125,14 @@ class _PatientDetailsState extends State<PatientDetails>
   }
 }
 
-Widget journal(BuildContext ctx) {
+Widget journal(BuildContext ctx, List<String> journal) {
   return ListView.builder(
-      itemCount: 3,
+      itemCount: journal.length,
       itemBuilder: (ctx, index) {
         return Column(
           children: [
             Text(
-              '${index + 1} ). To keep track of the available slots, you can create a slots node that will contain a  for sessions not assigned to new patients.Each slot will have a unique ID and its details',
+              '${index + 1} ). ${journal[index]}',
             ),
             const Divider(
               thickness: 1,

@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafiki/utilities/utility.dart';
-
-import '../models/SlotsModel.dart';
+import '../models/Slotsmodel.dart';
 
 class SlotProvider extends ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
@@ -20,7 +19,7 @@ class SlotProvider extends ChangeNotifier {
 
   Future<void> fetchSlots(String therapistid) async {
     final url = Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/Slots/$therapistid.json');
+        'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$therapistid.json');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final data = json.decode(response.body) ?? {} as Map<String, dynamic>;
@@ -71,7 +70,7 @@ class SlotProvider extends ChangeNotifier {
     if (sessions == 200) {
       var id = slots.id;
       final url = Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/Slots/$therapistid/$weekday/$id.json');
+          'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$therapistid/$weekday/$id.json');
       final response = await http.patch(
         url,
         body: json.encode({'patient_id': patientId}),
@@ -91,7 +90,7 @@ class SlotProvider extends ChangeNotifier {
   Future<int> getBookedSlotsForPatientInWeek(
       String patientId, String weekday) async {
     final url = Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/BookedTherapists/$patientId/sessions.json');
+        'https://rafiki-42373-default-rtdb.firebaseio.com/BookedTherapists/$patientId/sessions.json');
     final response = await http.get(url);
 
     var data = jsonDecode(response.body);
@@ -107,9 +106,9 @@ class SlotProvider extends ChangeNotifier {
     String patientId,
   ) async {
     final url = Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/BookedTherapists/$patientId/sessions.json');
+        'https://rafiki-42373-default-rtdb.firebaseio.com/BookedTherapists/$patientId/sessions.json');
     final url2 = Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/BookedTherapists/$patientId.json');
+        'https://rafiki-42373-default-rtdb.firebaseio.com/BookedTherapists/$patientId.json');
     final response = await http.get(url);
     var data = jsonDecode(response.body);
 
@@ -127,7 +126,7 @@ class SlotProvider extends ChangeNotifier {
 
   Future<void> addSlot(Slots slot, String therapistid, String weekday) async {
     final url = Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/Slots/$therapistid/$weekday.json');
+        'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$therapistid/$weekday.json');
     final response = await http.put(
       url,
       body: json.encode({
@@ -145,7 +144,7 @@ class SlotProvider extends ChangeNotifier {
   Future<void> addPatientToSlot(String slotId, String weekday, String patientId,
       String therapistId) async {
     final url = Uri.parse(
-        'https://your-firebase-db-url.com/Slots/$therapistId/$weekday/$slotId.json');
+        'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$therapistId/$weekday/$slotId.json');
     final response = await http.patch(
       url,
       body: json.encode({
@@ -161,7 +160,8 @@ class SlotProvider extends ChangeNotifier {
 }
 
 Future<void> removePatientFromSlot(String slotId) async {
-  final url = Uri.parse('https://your-firebase-db-url.com/slots/$slotId.json');
+  final url = Uri.parse(
+      'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$slotId.json');
   final response = await http.patch(
     url,
     body: json.encode({
@@ -175,7 +175,7 @@ Future<void> removePatientFromSlot(String slotId) async {
 
 Future<void> cancelSlot(String slotId) async {
   final url = Uri.parse(
-      'https://rafiki-511ac-default-rtdb.firebaseio.com/Slots/$slotId.json');
+      'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$slotId.json');
   final response = await http.patch(
     url,
     body: json.encode({'patientId': null}),

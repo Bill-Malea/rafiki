@@ -48,7 +48,7 @@ class TherapyProvider extends ChangeNotifier {
         };
       }
       final url = Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/Slots/$therapistid/$dayOfWeek.json');
+          'https://rafiki-42373-default-rtdb.firebaseio.com/Slots/$therapistid/$dayOfWeek.json');
       final response = await http.put(
         url,
         body: json.encode(slots),
@@ -66,7 +66,7 @@ class TherapyProvider extends ChangeNotifier {
     try {
       final response = await http.post(
           Uri.parse(
-              'https://rafiki-511ac-default-rtdb.firebaseio.com/Therapists/${user!.uid}.json'),
+              'https://rafiki-42373-default-rtdb.firebaseio.com/Therapists/${user!.uid}.json'),
           body: data);
 
       if (response.statusCode == 200) {
@@ -92,7 +92,7 @@ class TherapyProvider extends ChangeNotifier {
   Future<void> fetchTherapyData() async {
     try {
       final response = await http.get(Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/Therapists.json'));
+          'https://rafiki-42373-default-rtdb.firebaseio.com/Therapists.json'));
 
       final data = json.decode(response.body) as Map<String, dynamic>;
 
@@ -129,7 +129,7 @@ class TherapyProvider extends ChangeNotifier {
     final id = user!.uid;
     try {
       final response = await http.get(Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/BookedTherapists/$id.json'));
+          'https://rafiki-42373-default-rtdb.firebaseio.com/BookedTherapists/$id.json'));
       final data = json.decode(response.body);
       if (data != null) {
         // User already has a therapist
@@ -138,7 +138,7 @@ class TherapyProvider extends ChangeNotifier {
         // User has no therapist, so add the new therapist to the endpoint
         final response = await http.put(
             Uri.parse(
-                'https://rafiki-511ac-default-rtdb.firebaseio.com/BookedTherapists/$id.json'),
+                'https://rafiki-42373-default-rtdb.firebaseio.com/BookedTherapists/$id.json'),
             body: json.encode({
               'description': therapist.description,
               'specialties': therapist.specialties,
@@ -174,7 +174,7 @@ class TherapyProvider extends ChangeNotifier {
     final userId = user!.uid;
     try {
       final response = await http.get(Uri.parse(
-          'https://rafiki-511ac-default-rtdb.firebaseio.com/BookedTherapists/$userId.json'));
+          'https://rafiki-42373-default-rtdb.firebaseio.com/BookedTherapists/$userId.json'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 

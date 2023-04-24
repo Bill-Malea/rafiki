@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/TherapyProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../Providers/SlotsProvider.dart';
-import '../../../models/SlotsModel.dart';
+import '../../../models/Slotsmodel.dart';
 import '../../../models/TherapistModel.dart';
 import 'SlotsPatient.dart';
 

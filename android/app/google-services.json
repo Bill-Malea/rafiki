@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "891865379249",
-    "project_id": "rafiki-511ac",
-    "storage_bucket": "rafiki-511ac.appspot.com"
+    "project_number": "773764503594",
+    "project_id": "rafiki-42373",
+    "storage_bucket": "rafiki-42373.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:891865379249:android:ab609b91c7adce79c78d90",
+        "mobilesdk_app_id": "1:773764503594:android:e73ffd63b70d60409f0b53",
         "android_client_info": {
           "package_name": "com.example.rafiki"
         }
       },
       "oauth_client": [
         {
-          "client_id": "891865379249-bqt40pe15kkk8lfreihfu7sni1d1ug1a.apps.googleusercontent.com",
+          "client_id": "773764503594-tm8jfgfll0j2ai8kv26pnmck65i135tr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDaKcHp6DoTvxzvv6Q3o__Bixcagy2NKuI"
+          "current_key": "AIzaSyAx6dVsbCPTupuXZdepxuZdeDaESJD-24I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "891865379249-bqt40pe15kkk8lfreihfu7sni1d1ug1a.apps.googleusercontent.com",
+              "client_id": "773764503594-tm8jfgfll0j2ai8kv26pnmck65i135tr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

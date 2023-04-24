@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/SlotsProvider.dart';
 import 'package:rafiki/Providers/TherapyProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../models/SlotsModel.dart';
 import '../../../models/TherapistModel.dart';
 import '../../Therapist/Screens/Slots.dart';
 import 'SlotsPatient.dart';

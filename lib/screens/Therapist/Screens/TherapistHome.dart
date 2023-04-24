@@ -6,8 +6,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/SlotsProvider.dart';
 
-import '../../../models/SlotsModel.dart';
-
 class TherapistHome extends StatelessWidget {
   const TherapistHome({super.key});
 
@@ -74,6 +72,15 @@ class TherapistHome extends StatelessWidget {
         ? 0
         : (availableslot().isNaN ? 0 : availableslot() / subslots.length * 100)
             .floor();
+    var occupedprogcolor = progresscolor(
+        (occupiedslot().isNaN || occupiedslot().isInfinite
+                    ? 0
+                    : occupiedslot() / slots.length)
+                .truncate()
+                .toInt() *
+            100);
+    var occupiedpercenttxt = occupiedslot().toString();
+    var occupiedpercent = (occupiedslot() / slots.length);
 
     return Container(
       padding: const EdgeInsets.all(10),
@@ -288,10 +295,9 @@ class TherapistHome extends StatelessWidget {
                     CircularPercentIndicator(
                       radius: 30.0,
                       lineWidth: 5.0,
-                      percent: (occupiedslot() / slots.length),
-                      center: Text(occupiedslot().toString()),
-                      progressColor: progresscolor(
-                          (occupiedslot() / slots.length).ceil() * 100),
+                      percent: occupiedpercent,
+                      center: Text(occupiedpercenttxt),
+                      progressColor: occupedprogcolor,
                     ),
                   ],
                 ),

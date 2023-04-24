@@ -21,7 +21,7 @@ class UserProvider extends ChangeNotifier {
     try {
       final response = await http.post(
           Uri.parse(
-              'https://rafiki-511ac-default-rtdb.firebaseio.com/Patients/$id.json'),
+              'https://rafiki-42373-default-rtdb.firebaseio.com/Patients/$id.json'),
           body: data);
 
       if (response.statusCode == 200) {
@@ -44,7 +44,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<bool> hasPatientData(String patientid) async {
     final response = await http.get(Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/Patients/$id.json'));
+        'https://rafiki-42373-default-rtdb.firebaseio.com/Patients/$id.json'));
     final data = json.decode(response.body);
     _haspatientdata = data != null;
     notifyListeners();
@@ -54,7 +54,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> fetchpatients() async {
     final response = await http.get(Uri.parse(
-        'https://rafiki-511ac-default-rtdb.firebaseio.com/Patients.json'));
+        'https://rafiki-42373-default-rtdb.firebaseio.com/Patients.json'));
     final rawdata = json.decode(response.body);
     if (response.statusCode == 200) {
       var data = rawdata as Map<String, dynamic>;
@@ -73,7 +73,7 @@ class UserProvider extends ChangeNotifier {
           ));
         }
       });
-    
+
       _patients = rawpatientlist;
       notifyListeners();
     }
