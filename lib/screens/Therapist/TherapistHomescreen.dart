@@ -24,11 +24,11 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
   final auth = FirebaseAuth.instance;
   @override
   void initState() {
-    super.initState();
     Provider.of<SlotProvider>(context, listen: false)
         .fetchSlots(auth.currentUser!.uid);
     Provider.of<TherapyProvider>(context, listen: false).fetchTherapyData();
     Provider.of<UserProvider>(context, listen: false).fetchpatients();
+    super.initState();
   }
 
   final List<Widget> _pages = <Widget>[

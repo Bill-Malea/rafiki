@@ -36,7 +36,6 @@ class JournalProvider extends ChangeNotifier {
           'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'));
 
       final data = json.decode(getResponse.body);
-
       if (getResponse.statusCode == 200 && data != null) {
         var rawdata = [];
         var journalslist = data as Map;
@@ -69,37 +68,50 @@ class JournalProvider extends ChangeNotifier {
       _isLoading = true;
 
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return false;
   }
 
-  Future<void> fectchjournals(String id) async {
+  Future<List<Journal>> fectchjournals(String id) async {
     try {
       var getResponse = await http.get(Uri.parse(
           'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$id.json'));
 
       final data = json.decode(getResponse.body);
-
+      List<Journal> rawjournals = [];
       var sum = 0.0;
       var count = 0;
       if (getResponse.statusCode == 200 && data != null) {
         var journalslist = data as Map<String, dynamic>;
-        List<Journal> rawjournals = [];
+
         journalslist.forEach((key, val) {
           var journaldata = val as Map<String, dynamic>;
           journaldata.forEach((id, value) {
             var rating = value['rating'];
+
+            var mood = value['mood'];
+
+            var journal = value['journal'];
+
             sum += rating;
             count++;
+            rawjournals.add(Journal(
+                id: id.toString(),
+                mood: mood.toString(),
+                rating: rating.toString(),
+                journal: journal.toString()));
           });
           var averageRating = count > 0 ? sum / count * 100 : 0;
           _patientaverage = averageRating.toDouble();
-
           notifyListeners();
         });
-      } else {}
+        return rawjournals;
+      }
     } on SocketException {
     } catch (e) {}
+    return [];
   }
 
   Future<void> uploadjournal(String patientid, dynamic journal) async {
@@ -112,11 +124,11 @@ class JournalProvider extends ChangeNotifier {
               'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$patientid/$todaydate.json'),
           body: jsonEncode(journal));
       final postData = json.decode(postResponse.body);
-      print(postResponse.body);
       if (postResponse.statusCode == 200) {
+        _isLoading = false;
+        notifyListeners();
       } else {
         _isLoading = false;
-
         notifyListeners();
       }
     } on SocketException {
@@ -134,8 +146,13 @@ class JournalProvider extends ChangeNotifier {
 
 class Journal {
   final String id;
-  final String date;
+  final String mood;
   final String rating;
+  final String journal;
 
-  Journal({required this.id, required this.date, required this.rating});
+  Journal(
+      {required this.id,
+      required this.mood,
+      required this.rating,
+      required this.journal});
 }

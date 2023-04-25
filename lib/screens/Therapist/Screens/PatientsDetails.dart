@@ -37,8 +37,6 @@ class _PatientDetailsState extends State<PatientDetails>
 
   @override
   Widget build(BuildContext context) {
-    var journals = Provider.of<JournalProvider>(context)
-        .fectchjournals(widget.patient.userid);
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -95,29 +93,73 @@ class _PatientDetailsState extends State<PatientDetails>
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
-              height: 30,
-              child: TabBar(
-                indicatorColor: dividercolor(tabController.index),
-                controller: tabController,
-                tabs: const [
-                  Tab(text: 'Sad'),
-                  Tab(text: 'Angry'),
-                  Tab(text: 'Neutral'),
-                  Tab(text: 'Happy'),
-                ],
-              ),
+            FutureBuilder(
+              future: Provider.of<JournalProvider>(context)
+                  .fectchjournals(widget.patient.userid),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  if (snapshot.hasData) {
+                    List<Journal>? journals = snapshot.data;
+
+                    var sad = journals!
+                        .where((element) => element.mood.toLowerCase() == 'sad')
+                        .toList();
+                    var angry = journals
+                        .where(
+                            (element) => element.mood.toLowerCase() == 'angry')
+                        .toList();
+                    var neutral = journals
+                        .where((element) =>
+                            element.mood.toLowerCase() == 'neutral')
+                        .toList();
+                    var happy = journals
+                        .where(
+                            (element) => element.mood.toLowerCase() == 'happy')
+                        .toList();
+                    if (journals.isNotEmpty) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 30,
+                            child: TabBar(
+                              indicatorColor: dividercolor(tabController.index),
+                              controller: tabController,
+                              tabs: const [
+                                Tab(text: 'Sad'),
+                                Tab(text: 'Angry'),
+                                Tab(text: 'Neutral'),
+                                Tab(text: 'Happy'),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: TabBarView(
+                                controller: tabController,
+                                children: [
+                                  journal(ctx, sad),
+                                  journal(ctx, angry),
+                                  journal(ctx, neutral),
+                                  journal(ctx, sad),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Center(child: Text('No journal'));
+                    }
+                  } else {
+                    return const Center(
+                        child: Text('Failed to fetch journals'));
+                  }
+                }
+              },
             ),
-            Expanded(
-                child: Container(
-              padding: const EdgeInsets.all(10),
-              child: TabBarView(controller: tabController, children: [
-                journal(context, []),
-                journal(context, []),
-                journal(context, []),
-                journal(context, []),
-              ]),
-            )),
           ],
         ),
       ),
@@ -125,14 +167,14 @@ class _PatientDetailsState extends State<PatientDetails>
   }
 }
 
-Widget journal(BuildContext ctx, List<String> journal) {
+Widget journal(BuildContext ctx, List<Journal> journal) {
   return ListView.builder(
       itemCount: journal.length,
       itemBuilder: (ctx, index) {
         return Column(
           children: [
             Text(
-              '${index + 1} ). ${journal[index]}',
+              '${index + 1} ). ${journal[index].journal}',
             ),
             const Divider(
               thickness: 1,

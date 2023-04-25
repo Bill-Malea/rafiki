@@ -72,13 +72,13 @@ class TherapistHome extends StatelessWidget {
         ? 0
         : (availableslot().isNaN ? 0 : availableslot() / subslots.length * 100)
             .floor();
-    var occupedprogcolor = progresscolor(
-        (occupiedslot().isNaN || occupiedslot().isInfinite
-                    ? 0
-                    : occupiedslot() / slots.length)
-                .truncate()
-                .toInt() *
-            100);
+    var occslot = occupiedslot().isNaN ||
+            occupiedslot().isFinite ||
+            occupiedslot().isInfinite
+        ? 0
+        : occupiedslot();
+
+    var occupedprogcolor = progresscolor(occslot);
     var occupiedpercenttxt = occupiedslot().toString();
     var occupiedpercent = (occupiedslot() / slots.length);
 

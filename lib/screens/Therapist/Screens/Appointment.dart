@@ -37,11 +37,11 @@ class _AppointmentState extends State<Appointment> {
       return distinctIds;
     }
 
-    Slots getslot(String id) {
+    Slots? getslot(String id) {
       var slot = subslots.where((element) =>
           element.patientId == id &&
           element.dayOfWeek.toLowerCase() == day.toLowerCase());
-      return slot.first;
+      return slot.isEmpty ? null : slot.first;
     }
 
     List<AppointmentModel> appointments() {
@@ -49,14 +49,16 @@ class _AppointmentState extends State<Appointment> {
       var myppat = getmypatients();
       for (var element in myppat) {
         var patientslot = getslot(element.userid);
-        apps.add(AppointmentModel(
-          name: element.name,
-          patientid: element.userid,
-          phone: element.phone,
-          starttime: patientslot.startTime,
-          endtime: patientslot.endTime,
-          gender: element.gender,
-        ));
+        if (patientslot != null) {
+          apps.add(AppointmentModel(
+            name: element.name,
+            patientid: element.userid,
+            phone: element.phone,
+            starttime: patientslot.startTime,
+            endtime: patientslot.endTime,
+            gender: element.gender,
+          ));
+        }
       }
       return apps;
     }
@@ -80,123 +82,129 @@ class _AppointmentState extends State<Appointment> {
           const SizedBox(
             height: 10,
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: patientlist.length,
-            itemBuilder: (context, index) {
-              var patient = patientlist[index];
-              return Column(
-                children: [
-                  Container(
-                      padding: const EdgeInsets.all(2),
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.person_pin_circle_rounded,
-                              color: Colors.black,
-                              size: 25,
-                            )),
-                        title: Text(patient.name),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(patient.phone),
-                                Text(patient.gender),
-                                Container(
-                                  width: 70,
-                                  height: 30,
-                                  decoration: const BoxDecoration(
+          patientlist.isEmpty
+              ? const Center(child: Text('No Appointments Today'))
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: patientlist.length,
+                  itemBuilder: (context, index) {
+                    var patient = patientlist[index];
+                    return Column(
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.all(2),
+                            child: ListTile(
+                              leading: const CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Icon(
+                                    Icons.person_pin_circle_rounded,
                                     color: Colors.black,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(3)),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          Icons.phone,
-                                          color: Colors.white,
-                                          size: 11,
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          'Call',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  'Time',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Container(
-                                  height: 70,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(3)),
-                                  ),
-                                  child: Column(
+                                    size: 25,
+                                  )),
+                              title: Text(patient.name),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        patient.starttime,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                      const SizedBox(
-                                        height: 3,
-                                      ),
-                                      const Text(
-                                        '-',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      const SizedBox(
-                                        height: 3,
-                                      ),
-                                      Text(
-                                        patient.endtime,
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                      Text(patient.phone),
+                                      Text(patient.gender),
+                                      Container(
+                                        width: 70,
+                                        height: 30,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(3)),
+                                        ),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(
+                                                Icons.phone,
+                                                color: Colors.white,
+                                                size: 11,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                'Call',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-                  const Divider(
-                    thickness: 1,
-                  )
-                ],
-              );
-            },
-          )
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Time',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        height: 70,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(3)),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              patient.starttime,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            const Text(
+                                              '-',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            Text(
+                                              patient.endtime,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )),
+                        const Divider(
+                          thickness: 1,
+                        )
+                      ],
+                    );
+                  },
+                )
         ],
       ),
     );
