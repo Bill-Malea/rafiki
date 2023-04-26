@@ -40,7 +40,7 @@ class _BookedTherapistState extends State<BookedTherapist> {
     List<Slot> slots = Provider.of<SlotProvider>(
       context,
     ).slots;
-    print(slots);
+
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(

@@ -46,7 +46,6 @@ class _TherapistDataState extends State<TherapistData> {
           'maxPatientsPerDay': maxPatientsPerDay,
           'rating': 0,
         };
-        
 
         Provider.of<TherapyProvider>(context, listen: false)
             .uploadTherapsitData(data, context)
@@ -93,8 +92,9 @@ class _TherapistDataState extends State<TherapistData> {
                         icon: Icons.male,
                         hintText: 'Enter your Gender',
                         validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your Gender';
+                          if (value!.toString().toLowerCase() != 'male' ||
+                              value!.toString().toLowerCase() != 'female') {
+                            return 'Gender can only be Male or Female';
                           }
                           return null;
                         },
@@ -109,7 +109,9 @@ class _TherapistDataState extends State<TherapistData> {
                         hintText: 'Enter your PhoneNumber',
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your name';
+                            return 'Please enter a Phonenumber';
+                          } else if (value.toString().length != 10) {
+                            return 'A valid phone number should have atleast 10 digits';
                           }
                           return null;
                         },
@@ -258,4 +260,3 @@ class _FormInputWidgetState extends State<FormInputWidget> {
     );
   }
 }
-

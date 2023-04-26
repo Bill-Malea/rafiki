@@ -137,8 +137,7 @@ class _MoodRowState extends State<MoodRow> {
     Mood selectedMood = moods.firstWhere((mood) => mood.isSelected);
     double moodRating = selectedMood.rating;
     String feelingText = _feelingController.text;
-    print(selectedMood);
-    print(feelingText);
+
     // Upload the object to the server
     var data = {
       'journal': feelingText,

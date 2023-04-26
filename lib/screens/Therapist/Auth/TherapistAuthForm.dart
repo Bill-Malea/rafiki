@@ -23,6 +23,7 @@ class _TherapistAuthFormState extends State<TherapistAuthForm> {
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
+  var _confirmPassword = '';
 
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
@@ -105,6 +106,9 @@ class _TherapistAuthFormState extends State<TherapistAuthForm> {
                             onSaved: (value) {
                               _userPassword = value!;
                             },
+                          ),
+                          const SizedBox(
+                            height: 35,
                           ),
                           const SizedBox(
                             height: 35,

@@ -63,7 +63,9 @@ class Patients extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PatientDetails(patient: patient,)),
+                          builder: (context) => PatientDetails(
+                                patient: patient,
+                              )),
                     );
                   },
                   child: Column(
@@ -79,18 +81,6 @@ class Patients extends StatelessWidget {
                                 size: 25,
                               )),
                           title: Text(patients[index].name),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 5.0,
-                            percent: 0.30,
-                            center: const Text(
-                              "Critical",
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                            progressColor: Colors.amber,
-                          ),
                         ),
                       ),
                       const Divider(

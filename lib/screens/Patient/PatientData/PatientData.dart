@@ -43,7 +43,8 @@ class _PatientDataState extends State<PatientData> {
           'yearofbith': yearofbirth,
         };
 
-        Provider.of<UserProvider>(context, listen: false).uploadPatientData(data, context)
+        Provider.of<UserProvider>(context, listen: false)
+            .uploadPatientData(data, context)
             .whenComplete(() {
           setState(() {
             _isloading = false;
@@ -76,9 +77,6 @@ class _PatientDataState extends State<PatientData> {
                         },
                         onChanged: (value) {
                           name = value;
-                          if (kDebugMode) {
-                            print(name);
-                          }
                         },
                       ),
                       FormInputWidget(
@@ -87,8 +85,9 @@ class _PatientDataState extends State<PatientData> {
                         icon: Icons.male,
                         hintText: 'Enter your Gender',
                         validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your Gender';
+                          if (value!.toString().toLowerCase() != 'male' ||
+                              value!.toString().toLowerCase() != 'female') {
+                            return 'Gender can only be Male or Female';
                           }
                           return null;
                         },
@@ -103,7 +102,9 @@ class _PatientDataState extends State<PatientData> {
                         hintText: 'Enter your PhoneNumber',
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your name';
+                            return 'Please enter a Phonenumber';
+                          } else if (value.toString().length != 10) {
+                            return 'A valid phone number should have atleast 10 digits';
                           }
                           return null;
                         },

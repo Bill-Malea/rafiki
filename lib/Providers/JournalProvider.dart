@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+import '../models/JournalModel.dart';
 import '../utilities/utility.dart';
 
 class JournalProvider extends ChangeNotifier {
@@ -74,7 +75,7 @@ class JournalProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<List<Journal>> fectchjournals(String id) async {
+  Future<void> fectchjournals(String id) async {
     try {
       var getResponse = await http.get(Uri.parse(
           'https://rafiki-42373-default-rtdb.firebaseio.com/Journals/$id.json'));
@@ -98,6 +99,7 @@ class JournalProvider extends ChangeNotifier {
             sum += rating;
             count++;
             rawjournals.add(Journal(
+                userid: key,
                 id: id.toString(),
                 mood: mood.toString(),
                 rating: rating.toString(),
@@ -107,11 +109,10 @@ class JournalProvider extends ChangeNotifier {
           _patientaverage = averageRating.toDouble();
           notifyListeners();
         });
-        return rawjournals;
+        _journal = rawjournals;
+        notifyListeners();
       }
-    } on SocketException {
-    } catch (e) {}
-    return [];
+    } on SocketException {}
   }
 
   Future<void> uploadjournal(String patientid, dynamic journal) async {
@@ -142,17 +143,4 @@ class JournalProvider extends ChangeNotifier {
       rethrow;
     }
   }
-}
-
-class Journal {
-  final String id;
-  final String mood;
-  final String rating;
-  final String journal;
-
-  Journal(
-      {required this.id,
-      required this.mood,
-      required this.rating,
-      required this.journal});
 }

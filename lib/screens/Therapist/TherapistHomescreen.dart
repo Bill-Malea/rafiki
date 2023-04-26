@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:rafiki/Providers/JournalProvider.dart';
 import 'package:rafiki/Providers/SlotsProvider.dart';
 import 'package:rafiki/SelectUser.dart';
 import 'package:rafiki/screens/Therapist/Screens/Appointment.dart';
@@ -28,6 +29,7 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
         .fetchSlots(auth.currentUser!.uid);
     Provider.of<TherapyProvider>(context, listen: false).fetchTherapyData();
     Provider.of<UserProvider>(context, listen: false).fetchpatients();
+    Provider.of<JournalProvider>(context, listen: false);
     super.initState();
   }
 
