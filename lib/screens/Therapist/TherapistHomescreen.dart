@@ -29,7 +29,7 @@ class _TherapistHomeScreenState extends State<TherapistHomeScreen> {
         .fetchSlots(auth.currentUser!.uid);
     Provider.of<TherapyProvider>(context, listen: false).fetchTherapyData();
     Provider.of<UserProvider>(context, listen: false).fetchpatients();
-    Provider.of<JournalProvider>(context, listen: false);
+
     super.initState();
   }
 

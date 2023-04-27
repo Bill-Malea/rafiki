@@ -22,12 +22,14 @@ class _AppointmentState extends State<Appointment> {
     var patientsids = Provider.of<SlotProvider>(context).mypatientsid;
     var patients = Provider.of<UserProvider>(context).patients;
     var subslots = Provider.of<SlotProvider>(context).subslots;
+
     List<Patient> getmypatients() {
       List<Patient> result = [];
-      if (patientsids.isNotEmpty && patientsids.isNotEmpty) {
+      if (patients.isNotEmpty && patientsids.isNotEmpty) {
         for (var patientid in patientsids) {
-          final patient =
-              patients.firstWhere((element) => element.userid == patientid);
+          var patient = patients.firstWhere((element) {
+            return element.userid == patientid;
+          });
           result.add(patient);
         }
       }
@@ -64,6 +66,7 @@ class _AppointmentState extends State<Appointment> {
     }
 
     List<AppointmentModel> patientlist = appointments();
+
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(

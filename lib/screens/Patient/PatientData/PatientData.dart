@@ -85,9 +85,8 @@ class _PatientDataState extends State<PatientData> {
                         icon: Icons.male,
                         hintText: 'Enter your Gender',
                         validator: (value) {
-                          if (value!.toString().toLowerCase() != 'male' ||
-                              value!.toString().toLowerCase() != 'female') {
-                            return 'Gender can only be Male or Female';
+                          if (value!.isEmpty) {
+                            return 'Please enter your name';
                           }
                           return null;
                         },

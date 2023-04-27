@@ -7,19 +7,28 @@ import 'package:rafiki/screens/Therapist/Screens/PatientsDetails.dart';
 
 import '../../../models/PatientsModel.dart';
 
-class Patients extends StatelessWidget {
+class Patients extends StatefulWidget {
   const Patients({super.key});
 
+  @override
+  State<Patients> createState() => _PatientsState();
+}
+
+class _PatientsState extends State<Patients> {
   @override
   Widget build(BuildContext context) {
     var patients = Provider.of<UserProvider>(context).patients;
     var patientsids = Provider.of<SlotProvider>(context).mypatientsid;
+
     List<Patient> getmypatients() {
       List<Patient> result = [];
-      if (patientsids.isNotEmpty && patientsids.isNotEmpty) {
+      if (patients.isNotEmpty && patientsids.isNotEmpty) {
+        print(patients[0].userid);
+        print(patientsids);
         for (var patientid in patientsids) {
-          final patient =
+          var patient =
               patients.firstWhere((element) => element.userid == patientid);
+
           result.add(patient);
         }
       }
@@ -28,6 +37,7 @@ class Patients extends StatelessWidget {
       return distinctIds;
     }
 
+    var mypatients = getmypatients();
     return Container(
       padding: const EdgeInsets.only(
         top: 10,
@@ -55,9 +65,9 @@ class Patients extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: getmypatients().length,
+              itemCount: mypatients.length,
               itemBuilder: (context, index) {
-                final patient = getmypatients()[index];
+                final patient = mypatients[index];
                 return InkWell(
                   onTap: () {
                     Navigator.push(

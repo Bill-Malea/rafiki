@@ -64,7 +64,7 @@ class UserProvider extends ChangeNotifier {
         var val = value as Map<String, dynamic>;
         for (var element in val.values) {
           rawpatientlist.add(Patient(
-            userid: element['UserId'] ?? '',
+            userid: key,
             county: element['county'] ?? '',
             gender: element['gender'] ?? '',
             name: element['name'] ?? '',

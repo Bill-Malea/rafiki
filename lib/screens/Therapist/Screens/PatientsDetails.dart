@@ -7,6 +7,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:rafiki/Providers/JournalProvider.dart';
 import 'package:rafiki/models/PatientsModel.dart';
+import 'package:rafiki/screens/Therapist/Screens/patientreport.dart';
 
 import '../../../models/JournalModel.dart';
 
@@ -74,96 +75,112 @@ class _PatientDetailsState extends State<PatientDetails>
     }
 
     return Scaffold(
-        appBar: AppBar(),
-        body: Container(
-            padding: const EdgeInsets.all(10),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                'Progress',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+      appBar: AppBar(),
+      body: Container(
+          padding: const EdgeInsets.all(10),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              'Progress',
+              style: TextStyle(
+                fontSize: 18,
               ),
-              Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.2),
-                child: CircularPercentIndicator(
-                  radius: 70.0,
-                  lineWidth: 7.0,
-                  percent: average,
-                  center: Text(
-                    progresstext(),
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.2),
+              child: CircularPercentIndicator(
+                radius: 70.0,
+                lineWidth: 7.0,
+                percent: average,
+                center: Text(
+                  progresstext(),
+                  style: const TextStyle(
+                    fontSize: 14,
                   ),
-                  progressColor: Colors.amber,
                 ),
+                progressColor: Colors.amber,
               ),
-              const SizedBox(
-                height: 20,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              widget.patient.name,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                widget.patient.name,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            Text(
+              'Tel: ${widget.patient.phone}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                'Tel: ${widget.patient.phone}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              'Journals',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Journals',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (journals.isNotEmpty)
-                SizedBox(
-                  height: 300,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 30,
-                          child: TabBar(
-                            indicatorColor: dividercolor(tabController.index),
+            ),
+            if (journals.isNotEmpty)
+              SizedBox(
+                height: 300,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: TabBar(
+                          indicatorColor: dividercolor(tabController.index),
+                          controller: tabController,
+                          tabs: const [
+                            Tab(text: 'Sad'),
+                            Tab(text: 'Angry'),
+                            Tab(text: 'Neutral'),
+                            Tab(text: 'Happy'),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: TabBarView(
                             controller: tabController,
-                            tabs: const [
-                              Tab(text: 'Sad'),
-                              Tab(text: 'Angry'),
-                              Tab(text: 'Neutral'),
-                              Tab(text: 'Happy'),
+                            children: [
+                              journal(context, sad),
+                              journal(context, angry),
+                              journal(context, neutral),
+                              journal(context, happy),
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: TabBarView(
-                              controller: tabController,
-                              children: [
-                                journal(context, sad),
-                                journal(context, angry),
-                                journal(context, neutral),
-                                journal(context, happy),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]),
-                )
-            ])));
+                      ),
+                    ]),
+              )
+          ])),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.black,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Patientreport(
+                      patient: widget.patient,
+                      journals: journals,
+                    )),
+          );
+        },
+        label: const Text('Create PDF'),
+        icon: const Icon(Icons.picture_as_pdf),
+      ),
+    );
   }
 
   Widget journal(BuildContext ctx, List<Journal> journal) {

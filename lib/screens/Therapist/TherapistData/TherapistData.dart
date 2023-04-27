@@ -81,9 +81,6 @@ class _TherapistDataState extends State<TherapistData> {
                         },
                         onChanged: (value) {
                           name = value;
-                          if (kDebugMode) {
-                            print(name);
-                          }
                         },
                       ),
                       FormInputWidget(
